@@ -1,0 +1,91 @@
+﻿@*@model IEnumerable<TaskManagementSystem.Domain.Entities.Task>*@
+@model PagedList.IPagedList<TaskManagementSystem.Domain.Entities.Task>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "TaskList";
+}
+
+<h2>TaskList</h2>
+<h4>User: @ViewBag.UserName</h4>
+
+
+<table class="table">
+    <tr>
+
+        <th>
+            Task Name
+        </th>
+        <td>
+            Comments
+        </td>
+        <th>
+           Project
+        </th>
+
+        <th>
+            Description
+        </th>
+
+        <th>
+            Type
+        </th>
+        <th>
+            Progress
+        </th>
+        <th>
+            End DateTime
+        </th>
+        <th>
+            Active
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.ActionLink(item.Name, "Details", "Tasks", new { id = item.ID }, null)
+        </td>
+        <td>
+            @Html.ActionLink(  + item.Comments.Count() + " " + "Comments", "TaskCommentList", "Tasks", new { id = item.ID }, null)
+
+
+        </td>
+        <td>
+            @Html.ActionLink(item.Project.Name, "Details", "Projects", new { id = item.ProjectId }, null)
+            
+        </td>
+
+
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+
+        <td>
+            @Html.DisplayFor(modelItem => item.Type)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Progress)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EndDateTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsActive)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", "Tasks", new { id=item.ID }, null) |
+            @Html.ActionLink("Details", "Details", "Tasks", new { id = item.ID }, null) |
+            @Html.ActionLink("Delete", "Delete", "Tasks", new { id = item.ID }, null) 
+        </td>
+    </tr>
+}
+
+</table>
+
+
+@Html.PagedListPager(Model, page => Url.Action("TaskList", new { page = page }))
+
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount

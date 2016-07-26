@@ -1,0 +1,90 @@
+﻿@*@model IEnumerable<TaskManagementSystem.Domain.Entities.Task>*@
+@model PagedList.IPagedList<TaskManagementSystem.Domain.Entities.Task>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Tasks</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            Task Name
+        </th>
+         <th> Task Comments</th>
+        <th>
+            Project
+        </th>
+        <th>
+            User
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Description)
+        </th>
+
+        <th>
+            End Date
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Type)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Progress)
+        </th>
+ 
+        <th>
+            Active
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+
+        </td>
+        <td>
+            @Html.ActionLink(@item.Comments.Count() + " " + "Comments", "TaskCommentList", new { id = item.ID }, null)
+        </td>
+        <td>
+            @Html.ActionLink( item.Project.Name,"Details", "Projects", new { id = item.ProjectId }, null )
+        </td>
+        <td>
+            @Html.ActionLink(item.User.UserName, "Details", "Users", new { id = item.UserId }, null)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+
+        <td>
+            @Html.DisplayFor(modelItem => item.EndDateTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Type)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Progress)
+        </td>
+
+        <td>
+            @Html.DisplayFor(modelItem => item.IsActive)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ID })  |
+            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+        </td>
+    </tr>
+}
+
+</table>
+
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }))
+
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount

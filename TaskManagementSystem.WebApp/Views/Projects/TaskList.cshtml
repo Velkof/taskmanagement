@@ -1,0 +1,82 @@
+﻿@model IEnumerable<TaskManagementSystem.Domain.Entities.Task>
+
+@{
+    ViewBag.Title = "TaskList";
+}
+
+<script src="Scripts/jquery-ui-1.11.4.min.js"></script>
+
+<h2>Task List</h2>
+<h4> Project: @ViewBag.ProjectName</h4>
+
+@using (Html.BeginForm("Create", "Tasks", FormMethod.Get))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+
+        @Html.Hidden("projectID", Url.RequestContext.RouteData.Values["id"])
+
+
+        <div class="form-group col-xs-12">
+            <div>
+                <input type="submit" value="Add New Task" class="btn btn-default " id="addTaskBtn"/>
+            </div>
+        </div>
+    </div>
+}
+<div id="taskTableDivsContainer">
+    <div class="taskDivs col-xs-6 col-md-3">
+        ToDo
+        <ul class="ToDo" name="ToDo">
+            @foreach (var item in Model.Where(x => x.Progress.ToString() == "ToDo"))
+            {
+                <li style="list-style: none;" id="@item.ID">
+                    @Html.ActionLink(@Html.DisplayFor(modelItem => item.Name).ToString(), "Details", "Tasks", new { id = item.ID }, null)
+                </li>
+            }
+        </ul>
+    </div>
+    <div class="taskDivs col-xs-6 col-md-3">
+        In Progress
+        <ul class="InProgress" name="InProgress">
+            @foreach (var item in Model.Where(x => x.Progress.ToString() == "InProgress"))
+            {
+                <li style="list-style: none;" id="@item.ID">
+                    @Html.ActionLink(@Html.DisplayFor(modelItem => item.Name).ToString(), "Details", "Tasks", new { id = item.ID }, null)
+                </li>
+            }
+        </ul>
+    </div>
+    <div class="taskDivs col-xs-6 col-md-3">
+        In Testing(QA)
+        <ul class="InTestingQA" name="InTestingQA" >
+            @foreach (var item in Model.Where(x => x.Progress.ToString() == "InTestingQA"))
+            {
+                <li style="list-style: none;" id="@item.ID">
+                    @Html.ActionLink(@Html.DisplayFor(modelItem => item.Name).ToString(), "Details", "Tasks", new { id = item.ID }, null)
+                </li>
+            }
+        </ul>
+    </div>
+    <div class="taskDivs col-xs-6 col-md-3">
+        Done
+        <ul class="Done" name="Done">
+            @foreach (var item in Model.Where(x => x.Progress.ToString() == "Done"))
+            {
+                <li style="list-style: none;" id="@item.ID">
+                    @Html.ActionLink(@Html.DisplayFor(modelItem => item.Name).ToString(), "Details", "Tasks", new { id = item.ID }, null)
+
+                </li>
+            }
+        </ul>
+    </div>
+
+</div>
+<p>
+
+@Html.ActionLink("Back to Project List", "Index")
+</p>
